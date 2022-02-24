@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Joi  from 'joi';
+import Joi from 'joi';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -19,7 +19,18 @@ const userSchema = new mongoose.Schema({
         required: true,
         max: 200,
         min:5
+    },
+    validated: {
+        type: Boolean,
+        default: false
+    },
+    validate_code: {
+        type: String,
+        unique: true,
+        required: true
     }
+}, {
+    timestamps:true
 })
 
 

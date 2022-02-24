@@ -1,4 +1,3 @@
-// import logger from '../logger/logger.js';
 import User, {validateUser, validateLogin} from '../models/userModel.js';
 import bcrypt from 'bcrypt';
 import logger from '../logger/logger.js'
@@ -11,10 +10,11 @@ const getUserLogin =  async (req, res) => {
         
         const { email, password } = req.body;
         const user = await User.findOne({ email })
-        if (!user) return res.status(400).send("Invalid email and password");
+        console.log(user)
+        if (!user) return res.status(400).send("Invalid Email and password");
 
         const validPass = await bcrypt.compare(password, user.password);
-        if (!validPass) return res.status(400).send("Invalid email and password");
+        if (!validPass) return res.status(400).send("Invalid Email and password");
         
         //setup token
         res.status(200).json(user)

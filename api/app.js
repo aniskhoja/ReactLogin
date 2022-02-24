@@ -2,6 +2,9 @@ import express from 'express';
 import router from './src/routes.js'
 import mongoose from 'mongoose';
 import cors from 'cors'
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 mongoose.connect("mongodb://localhost:27017/reactlogin")
     .then(

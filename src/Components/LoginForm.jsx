@@ -5,11 +5,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router';
 
 
-
-
 const LoginForm = () => {
     const [email, setEmail] = useState("")
-	const [password, setPassword] = useState("")
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState({type:false, message:""})
 	const navigate = useNavigate();
 
     const handleEmail = (e) => {
@@ -26,17 +25,22 @@ const LoginForm = () => {
 			const res = await axios.post("http://localhost:8000/api/login", obj);
 			if (res.data) {
 				navigate('/okay')
-				console.log("okay")
 			}
 		} catch (err) {
-			console.log(err.message)
+			console.log(err.response)
+			setError({type:true, message:err.response.data})
 		}
     }
 
   return (
       <div>
           <div className="limiter">
-		<div className="container-login100">
+			  <div className="container-login100">
+				  {error.type && (
+				  <div className="wrap-login100 alert-box">
+					<label>{error.message}</label>
+				  </div>
+				  )}
 			<div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 				<form className="login100-form validate-form">
 					<span className="login100-form-title p-b-49">
@@ -45,13 +49,14 @@ const LoginForm = () => {
 
 					<div className="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
 						<span className="label-input100">Email</span>
-						<input className="input100" type="text" name="username" placeholder="Type your username" onChange={handleEmail}/>
+						<input className="input100" type="text" name="username" autoComplete="off" placeholder="Type your username" onChange={handleEmail}/>
 						<span className="focus-input100" data-symbol="&#xf206;"></span>
 					</div>
 
 					<div className="wrap-input100 validate-input" data-validate="Password is required">
 						<span className="label-input100">Password</span>
-						<input className="input100" type="password" name="pass" placeholder="Type your password" onChange={handlePassword}/>
+							  <input className="input100" type="password" name="pass" placeholder="Type your password" onChange={handlePassword} />
+							  
 						<span className="focus-input100" data-symbol="&#xf190;"></span>
 					</div>
 					
@@ -90,15 +95,13 @@ const LoginForm = () => {
 						</a>
 					</div>
 
-					<div className="flex-col-c p-t-155">
-						<span className="txt1 p-b-17">
-							Or Sign Up Using
-						</span>
+					<div className="flex-col-c p-t-155 signup-mt">
 
-						<a href="/#" className="txt2" >
+						<a href="/register" className="txt2" >
 							Sign Up
 						</a>
 					</div>
+						  
 				</form>
 			</div>
 		</div>
