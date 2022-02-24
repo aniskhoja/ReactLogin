@@ -4,3 +4,7 @@
 {"level":"debug","message":"Required"}
 {"level":"debug","message":"Required"}
 {"level":"debug","message":"Required"}
+{"level":"error","message":"`Model.findOne()` cannot run without a model as `this`. Make sure you are not calling `new Model.findOne()`"}
+{"level":"error","message":"data and hash arguments required"}
+{"level":"error","message":"data and hash arguments required"}
+{"level":"error","message":"data and hash arguments required"}
