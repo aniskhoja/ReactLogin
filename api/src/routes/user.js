@@ -1,12 +1,13 @@
 import express from 'express';
-import { getPassReset, getUserLogin } from '../controllers/userControl.js';
+import { resetNewPass, getUserLogin, resetValidation } from '../controllers/userControl.js';
 
 
 const router = express.Router();
 
 //login route
 router.route('/').post(getUserLogin);
-router.route('/reset').post(getPassReset);
+router.route('/reset').post(resetNewPass);
+// router.route('/reset/:token').post(resetValidation);
 
 
 export default router;

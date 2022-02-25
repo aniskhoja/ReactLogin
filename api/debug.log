@@ -17836,3 +17836,9 @@
 {"level":"error","message":"Cannot set headers after they are sent to the client"}
 {"level":"error","message":"Cannot set headers after they are sent to the client"}
 {"level":"error","message":"Cannot set headers after they are sent to the client"}
+{"level":"error","message":"Cannot set headers after they are sent to the client"}
+{"level":"error","message":"Cannot read property 'validated' of null"}
+{"level":"error","message":"Cannot read property 'validated' of null"}
+{"level":"error","message":"Cannot read property 'validated' of null"}
+{"level":"error","message":"Cannot access 'newPassword' before initialization"}
+{"level":"error","message":"Cannot access 'newPassword' before initialization"}

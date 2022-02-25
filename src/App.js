@@ -15,6 +15,7 @@ function App() {
           <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset" element={<ForgetPass />} />
+          <Route path="/reset/:token" element={<ForgetPass />} />
           <Route path="/validation" element={<EmailValidation />} />
           <Route path="/validation/:token" element={<TokenValidation />} />
         </Routes>

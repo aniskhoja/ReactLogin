@@ -7,7 +7,7 @@ const TokenValidation = () => {
     const navigate = useNavigate();
     const [error, setError] = useState({ type: false, message: "" })
     const params = useParams();
-
+    
     const getTokenVarify = async () => {
         try {
             const res = await axios.post("http://localhost:8000/api/validation/", params)
@@ -33,7 +33,7 @@ const TokenValidation = () => {
                     </div>
                 )}
                 <div className="wrap-login100 p-l-55 p-r-55 p-t-30 p-b-20 center">
-                    <img className='varify-Img' src="/images/warning.jpg" alt='verify-success' />
+                    <img className='varify-Img' src="/images/warning.jpg" alt='verify-error' />
                     <p>Opps! Something went wrong</p>
                     <div className="txt1 text-center p-t-20 p-b-20">
 								<span>
