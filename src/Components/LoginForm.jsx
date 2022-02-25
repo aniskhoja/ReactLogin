@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import axios from 'axios'
-import { useNavigate } from 'react-router';
+import {useNavigate} from 'react-router';
 
 
 const LoginForm = () => {
@@ -10,6 +10,11 @@ const LoginForm = () => {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState({type:false, message:""})
 	const navigate = useNavigate();
+
+	// const params = useParams();
+	// // const tokenCode = new URLSearchParams(search).get('/');
+	// console.log(params)
+	// console.log("hello")
 
     const handleEmail = (e) => {
         setEmail(e.target.value)

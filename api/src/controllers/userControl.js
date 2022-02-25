@@ -1,21 +1,49 @@
-import User, {validateUser, validateLogin} from '../models/userModel.js';
+import User, {validateUser, validateLogin, validateToken} from '../models/userModel.js';
 import bcrypt from 'bcrypt';
 import logger from '../logger/logger.js'
+import jwt  from 'jsonwebtoken';
+import mail from './../utils/mailer.js';
 
 
-const getUserLogin =  async (req, res) => {
+const getValidate = async (req, res) => {
+    try {
+        const { error } = validateToken(req.body)
+        if (error) return res.status(400).send(error.details[0].message)
+
+        const { token } = req.body;
+        const { email } = jwt.verify(token, process.env.SECRET_KEY)
+        const {id} = await User.findOne({ email })
+        const isValidate = await User.findByIdAndUpdate(id , {
+            validated: true,
+        })
+        if (!isValidate) return res.status(400).send("Your validation code is expire")
+        
+        res.status(200).send({message: "user is verified"})
+
+    } catch (err) {
+        logger.error(err.message)
+        res.status(400).send(err.message)
+    }
+    
+}
+
+const getPassReset = async (req, res) => {
+
+}
+
+const getUserLogin = async (req, res) => {
     try {
         const { error } = validateLogin(req.body)
         if (error) return res.status(400).send(error.details[0].message)
         
         const { email, password } = req.body;
         const user = await User.findOne({ email })
-        console.log(user)
         if (!user) return res.status(400).send("Invalid Email and password");
 
         const validPass = await bcrypt.compare(password, user.password);
         if (!validPass) return res.status(400).send("Invalid Email and password");
-        
+
+        if(!user.validated) return res.status(400).send("Email not Verified. please check your email.")
         //setup token
         res.status(200).json(user)
     } catch (err) {
@@ -26,28 +54,50 @@ const getUserLogin =  async (req, res) => {
 }
 
 const getUserRegister = async (req, res) => {
+    let { emailToken, user } = "";
+
     try {
         const { error } = validateUser(req.body)
         if (error) return res.status(400).send(error.details[0].message)
         
         const { username, email, password } = req.body
-        const hashpass = await bcrypt.hash(password, 10)
-        const user = new User({
-            username,
-            email,
-            password: hashpass
-        })
+
+        const isUserExist = await User.findOne({ email })
+        console.log(isUserExist)
+        if (isUserExist.validated) return res.status(400).send("You are already register. Please login")
+        if (isUserExist) {
+                const id = isUserExist._id
+                emailToken = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: 60 * 60 })
+                user = await User.findByIdAndUpdate(id,{
+                    validate_code: emailToken,
+                    username,
+                    password
+                });
+        } else {
+            const hashpass = await bcrypt.hash(password, 10)
+            emailToken = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: 60 * 60 })
+            user = new User({
+                username,
+                email,
+                password: hashpass,
+                validate_code: emailToken
+            })
+        }
         const createUser = await user.save();
+        const url = `http://localhost:3000/validation/${emailToken}`
+        try {
+            mail(email, url)
+        } catch (e) {
+            logger.error(`sending email failed exception thrown: ${e.message}`)
+        }
+
         res.status(201).send(createUser)
 
-        //redirect to login
-        //send email for verification
     } catch (err) {
         console.log(err.message)
         logger.error(err.message)
         res.status(401).send(err.message)
     }
-
 };
 
-export {getUserLogin, getUserRegister}
+export {getUserLogin, getUserRegister, getValidate, getPassReset}

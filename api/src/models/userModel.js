@@ -50,5 +50,12 @@ function validateLogin(user) {
     })
     return schema.validate(user)
 }
-export {validateUser, validateLogin}
+
+function validateToken(token) {
+    const schema = Joi.object({
+        token: Joi.string().min(10).max(200).required()
+    })
+    return schema.validate(token)
+}
+export {validateUser, validateLogin, validateToken}
 export default User;

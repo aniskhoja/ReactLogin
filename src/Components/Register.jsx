@@ -16,7 +16,7 @@ const Register = () => {
 		try {
 			const res = await axios.post("http://localhost:8000/api/register", obj);
 			if (res.data) {
-				navigate('/')
+				navigate('/validation')
 			}
 		} catch (err) {
 			console.log(err.message)
