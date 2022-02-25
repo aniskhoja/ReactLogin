@@ -1,5 +1,5 @@
 import express from 'express';
-import { resetNewPass, getUserLogin, resetValidation } from '../controllers/userControl.js';
+import { resetNewPass, getUserLogin } from '../controllers/userControl.js';
 
 
 const router = express.Router();

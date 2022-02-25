@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-async function mail(recipientEmail, url) {
+async function mail(recipientEmail, url, subject) {
         let testAccount = await nodemailer.createTestAccount();
 
         // create reusable transporter object using the default SMTP transport
@@ -17,8 +17,8 @@ async function mail(recipientEmail, url) {
         let info = await transporter.sendMail({
             from: '"mak test" <testmak04@gmail.com>', // sender address
             to: `${recipientEmail}`, // list of receivers
-            subject: "verification Email ✔", // Subject line
-            html: `Please click to verify you email <a href="${url}">${url}</a>` // html body
+            subject: `${subject} ✔`, // Subject line
+            html: `Please click to ${subject} <a href="${url}">${url}</a>` // html body
         });
     };
 

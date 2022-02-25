@@ -27,27 +27,27 @@ const getValidate = async (req, res) => {
     
 }
 
-const resetValidation = async (req, res) => {
-    console.log(req.body)
-     try {
-        const { error } = validateToken(req.body)
-        if (error) return res.status(400).send(error.details[0].message)
+// const resetValidation = async (req, res) => {
+//     console.log(req.body)
+//      try {
+//         const { error } = validateToken(req.body)
+//         if (error) return res.status(400).send(error.details[0].message)
 
-        const { token } = req.body;
-        const { email } = jwt.verify(token, process.env.SECRET_KEY)
-        const {id} = await User.findOne({ email })
-        const isValidate = await User.findByIdAndUpdate(id , {
-            validated: true,
-        })
-        if (!isValidate) return res.status(400).send("Your validation code is expire")
+//         const { token } = req.body;
+//         const { email } = jwt.verify(token, process.env.SECRET_KEY)
+//         const {id} = await User.findOne({ email })
+//         const isValidate = await User.findByIdAndUpdate(id , {
+//             validated: true,
+//         })
+//         if (!isValidate) return res.status(400).send("Your validation code is expire")
         
-        res.status(200).send({message: "user is verified"})
+//         res.status(200).send({message: "user is verified"})
 
-    } catch (err) {
-        logger.error(err.message)
-        res.status(400).send(err.message)
-    }
-}
+//     } catch (err) {
+//         logger.error(err.message)
+//         res.status(400).send(err.message)
+//     }
+// }
 
 
 const resetNewPass = async (req, res) => {
@@ -98,7 +98,7 @@ const resetNewPass = async (req, res) => {
         const resetToken = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '1h' })
         const url = `http://localhost:3000/reset/${resetToken}`
          try {
-            mail(email, url)
+            mail(email, url, "Reset Password")
         } catch (e) {
             logger.error(`sending email failed exception thrown: ${e.message}`)
         }
@@ -163,7 +163,7 @@ const getUserRegister = async (req, res) => {
         const createUser = await user.save();
         const url = `http://localhost:3000/validation/${emailToken}`
         try {
-            mail(email, url)
+            mail(email, url, "Verify Email")
         } catch (e) {
             logger.error(`sending email failed exception thrown: ${e.message}`)
         }
@@ -177,4 +177,4 @@ const getUserRegister = async (req, res) => {
     }
 };
 
-export {getUserLogin, getUserRegister, getValidate, resetNewPass, resetValidation}
+export {getUserLogin, getUserRegister, getValidate, resetNewPass}
